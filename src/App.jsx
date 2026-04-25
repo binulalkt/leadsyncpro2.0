@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './index.css';
-import { seedDatabase, getLeads, getMilestones, getSettings, getAllCallLogs, getCallLogs } from './db';
+import { seedDatabase, getLeads, getMilestones, getSettings, getAllCallLogs, getCallLogs, addLead } from './db';
 import { useAppStore } from './store';
 import Topbar from './components/Topbar';
 import LeadList from './components/LeadList';
@@ -8,17 +8,20 @@ import LeadDetail from './components/LeadDetail';
 import CallSidebar from './components/CallSidebar';
 import PostCallModal from './components/PostCallModal';
 import Analytics from './components/Analytics';
+import AddLeadDrawer from './components/AddLeadDrawer';
 
 export default function App() {
   const {
     page, setLeads, setMilestones, setSettings, setAllLogs,
     callActive, startCall, openModal, modalOpen,
-    callLogsCache, setLeadLogs,
+    callLogsCache, setLeadLogs, addLeadToStore,
   } = useAppStore();
 
-  const [loading,  setLoading]  = useState(true);
-  const [callData, setCallData] = useState(null);
-  const [consecNA, setConsecNA] = useState(0);
+  const [loading,      setLoading]      = useState(true);
+  const [callData,     setCallData]     = useState(null);
+  const [consecNA,     setConsecNA]     = useState(0);
+  const [addLeadOpen,  setAddLeadOpen]  = useState(false);
+  const [addFlash,     setAddFlash]     = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -45,7 +48,8 @@ export default function App() {
   const handleEndCall = (data) => {
     const lead = useAppStore.getState().callLead;
     if (lead) {
-      const logs = (callLogsCache[lead.id] || []).slice().sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const logs = (callLogsCache[lead.id] || [])
+        .slice().sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
       let streak = 0;
       for (const log of logs) {
         if (log.connection_status === 'No Answer') streak++;
@@ -61,6 +65,14 @@ export default function App() {
     const [allLogs, freshLeads] = await Promise.all([getAllCallLogs(), getLeads()]);
     setAllLogs(allLogs);
     setLeads(freshLeads);
+  };
+
+  const handleAddLead = async (formData) => {
+    const id = await addLead(formData);
+    addLeadToStore({ ...formData, id });
+    setAddLeadOpen(false);
+    setAddFlash(formData.name);
+    setTimeout(() => setAddFlash(null), 2500);
   };
 
   if (loading) {
@@ -82,8 +94,9 @@ export default function App() {
   }
 
   return (
-    <div style={{ height:'100vh', display:'flex', flexDirection:'column', overflow:'hidden' }}>
-      <Topbar callActive={callActive} />
+    <div style={{ height:'100vh', display:'flex', flexDirection:'column', overflow:'hidden', position:'relative' }}>
+      <Topbar callActive={callActive} onAddLead={() => setAddLeadOpen(true)} />
+
       <div style={{ flex:1, display:'flex', overflow:'hidden' }}>
         {page === 'leads' && (
           <>
@@ -94,9 +107,33 @@ export default function App() {
         )}
         {page === 'analytics' && <Analytics />}
       </div>
+
+      {/* Post-call modal */}
       {modalOpen && callData && (
         <PostCallModal callData={callData} consecutiveNoAnswers={consecNA} onClose={handleModalClose} />
       )}
+
+      {/* Add lead drawer */}
+      <AddLeadDrawer
+        open={addLeadOpen}
+        onClose={() => setAddLeadOpen(false)}
+        onSave={handleAddLead}
+      />
+
+      {/* Success toast */}
+      {addFlash && (
+        <div style={{
+          position:'fixed', bottom:20, left:'50%', transform:'translateX(-50%)',
+          background:'var(--gbg)', border:'1px solid var(--gdim)', borderRadius:4,
+          padding:'8px 16px', fontFamily:'var(--mono)', fontSize:10, color:'var(--green)',
+          zIndex:400, animation:'fadeup .3s ease', whiteSpace:'nowrap',
+        }}>
+          ✓ {addFlash} added to leads
+        </div>
+      )}
+      <style>{`
+        @keyframes fadeup{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+      `}</style>
     </div>
   );
 }
