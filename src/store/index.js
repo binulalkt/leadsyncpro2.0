@@ -1,49 +1,47 @@
 import { create } from 'zustand';
 
 export const useAppStore = create((set, get) => ({
-  // ─── Navigation ───────────────────────────────────────────
-  page: 'leads',          // 'leads' | 'analytics'
+  page: 'leads',
   setPage: page => set({ page }),
 
-  // ─── Leads ───────────────────────────────────────────────
   leads: [],
   setLeads: leads => set({ leads }),
   updateLeadInStore: (id, patch) =>
     set(s => ({ leads: s.leads.map(l => l.id === id ? { ...l, ...patch } : l) })),
   addLeadToStore: lead => set(s => ({ leads: [lead, ...s.leads] })),
+  removeLeadFromStore: id => set(s => ({
+    leads: s.leads.filter(l => l.id !== id),
+    selectedLead: s.selectedLead?.id === id ? null : s.selectedLead,
+  })),
 
-  // ─── Milestones ──────────────────────────────────────────
   milestones: [],
   setMilestones: ms => set({ milestones: ms }),
 
-  // ─── Settings ────────────────────────────────────────────
+  pitchCues: [],
+  setPitchCues: cues => set({ pitchCues: cues }),
+  updatePitchCueInStore: (id, patch) =>
+    set(s => ({ pitchCues: s.pitchCues.map(c => c.id === id ? { ...c, ...patch } : c) })),
+
   settings: { decay_days: 7 },
   setSettings: s => set({ settings: s }),
 
-  // ─── Selected lead (detail panel) ────────────────────────
   selectedLead: null,
   setSelectedLead: lead => set({ selectedLead: lead }),
 
-  // ─── Live call state ──────────────────────────────────────
+  // ─── Call state ──────────────────────────────────────────
   callActive: false,
   callLead: null,
   callSeconds: 0,
   callRunning: false,
-  callChecked: [],      // milestone labels completed
-  callObjTags: [],      // objection tags fired
+  callChecked: [],
+  callObjTags: [],
   callIntervalId: null,
 
-  startCall: lead => {
-    set({
-      callActive: true,
-      callLead: lead,
-      callSeconds: 0,
-      callRunning: false,
-      callChecked: [],
-      callObjTags: [],
-    });
-  },
-  endCallSetup: () => set({ callRunning: false }),
+  startCall: lead => set({
+    callActive: true, callLead: lead,
+    callSeconds: 0, callRunning: false,
+    callChecked: [], callObjTags: [],
+  }),
 
   startTimer: () => {
     const { callIntervalId } = get();
@@ -52,50 +50,37 @@ export const useAppStore = create((set, get) => ({
     set({ callRunning: true, callIntervalId: id });
   },
   pauseTimer: () => {
-    const { callIntervalId } = get();
-    clearInterval(callIntervalId);
+    clearInterval(get().callIntervalId);
     set({ callRunning: false, callIntervalId: null });
   },
   resetTimer: () => {
-    const { callIntervalId } = get();
-    clearInterval(callIntervalId);
+    clearInterval(get().callIntervalId);
     set({ callSeconds: 0, callRunning: false, callIntervalId: null });
   },
 
-  toggleMilestone: label =>
-    set(s => ({
-      callChecked: s.callChecked.includes(label)
-        ? s.callChecked.filter(l => l !== label)
-        : [...s.callChecked, label],
-    })),
+  toggleMilestone: label => set(s => ({
+    callChecked: s.callChecked.includes(label)
+      ? s.callChecked.filter(l => l !== label)
+      : [...s.callChecked, label],
+  })),
+  toggleObjTag: tag => set(s => ({
+    callObjTags: s.callObjTags.includes(tag)
+      ? s.callObjTags.filter(t => t !== tag)
+      : [...s.callObjTags, tag],
+  })),
 
-  toggleObjTag: tag =>
-    set(s => ({
-      callObjTags: s.callObjTags.includes(tag)
-        ? s.callObjTags.filter(t => t !== tag)
-        : [...s.callObjTags, tag],
-    })),
-
-  // ─── Post-call modal ──────────────────────────────────────
   modalOpen: false,
   openModal: () => set({ modalOpen: true }),
   closeCall: () => {
-    const { callIntervalId } = get();
-    clearInterval(callIntervalId);
+    clearInterval(get().callIntervalId);
     set({
-      callActive: false,
-      callLead: null,
-      callSeconds: 0,
-      callRunning: false,
-      callChecked: [],
-      callObjTags: [],
-      callIntervalId: null,
-      modalOpen: false,
+      callActive: false, callLead: null, callSeconds: 0,
+      callRunning: false, callChecked: [], callObjTags: [],
+      callIntervalId: null, modalOpen: false,
     });
   },
 
-  // ─── Call logs cache ─────────────────────────────────────
-  callLogsCache: {},   // { [leadId]: [...logs] }
+  callLogsCache: {},
   setLeadLogs: (leadId, logs) =>
     set(s => ({ callLogsCache: { ...s.callLogsCache, [leadId]: logs } })),
   appendLog: (leadId, log) =>
@@ -106,11 +91,9 @@ export const useAppStore = create((set, get) => ({
       },
     })),
 
-  // ─── All logs (analytics) ─────────────────────────────────
   allLogs: [],
   setAllLogs: logs => set({ allLogs: logs }),
 
-  // ─── UI filters ──────────────────────────────────────────
   search: '',
   statusFilter: null,
   sourceFilter: null,

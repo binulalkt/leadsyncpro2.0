@@ -1,29 +1,38 @@
-# LeadSyncPro
+# LeadSyncPro v2
 Offline-first CRM for solo B2C EdTech sales operators (Avodha)
 
 ## Stack
 - React + Vite
-- Dexie.js (IndexedDB, offline-first)
+- Dexie.js (IndexedDB, offline-first, no fake seed leads)
 - Zustand (state management)
-- Recharts (analytics charts)
-- IBM Plex Mono/Sans (typography)
+- Recharts (analytics)
+- Papaparse (CSV import)
 
 ## Run locally
 ```bash
 npm install
-npm run dev
+npm run dev      # localhost:5173
+npm run build    # production → dist/
 ```
 
 ## Deploy to Vercel
 ```bash
-npm install -g vercel
-vercel --prod
+npx vercel --prod
 ```
-Or connect your GitHub repo to vercel.com for auto-deploy on push.
+Or drag the `dist/` folder to vercel.com/new.
 
-## Features
-- Lead list with priority routing (Enquiries first), real-time search, status/source filters
-- Live call sidebar: manual timer, milestone checklist, objection tags, pitch cue card
-- Forced post-call modal with validation and ghost lead detection
-- Analytics dashboard: source conversion matrix, objection frequency, milestone gap, heatmap
-- 100% offline — all data stored in IndexedDB via Dexie.js
+## Features (v2)
+- **Add Lead** — slide-in drawer with full validation
+- **Edit Lead** — inline edit mode in detail panel
+- **Delete Lead** — with confirmation, cascades to call logs
+- **CSV Import** — drag-drop upload, preview table, bulk Dexie write (max 500 rows)
+- **WhatsApp templates** — 3 pre-filled message templates with lead name/course substitution
+- **Today view** — overdue + today follow-ups with red badge on nav
+- **Analytics empty states** — proper prompts when no call data exists
+- **Pitch cues in DB** — stored in pitchCues table, editable at runtime
+- **Live call sidebar** — timer, milestones, objection tags, pitch cues
+- **Forced post-call modal** — validation, ghost lead nudge
+- **No demo leads** — clean start, only structure data seeded
+
+## Clearing data
+Open DevTools → Application → IndexedDB → LeadSyncPro → Delete database → Refresh

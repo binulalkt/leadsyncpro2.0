@@ -7,6 +7,7 @@ db.version(1).stores({
   callLogs:   '++id, lead_id, timestamp, duration_seconds, connection_status, rating, feedback_customer, feedback_self, *completed_milestones, *objection_tags',
   milestones: '++id, order, label',
   settings:   '++id, decay_days',
+  pitchCues:  '++id, order, title, points',
 });
 
 // ─── Enums ───────────────────────────────────────────────────
@@ -31,15 +32,10 @@ export const DEFAULT_MILESTONES = [
   { order: 8, label: 'Next step agreed upon' },
 ];
 
-export const WHATSAPP_TEMPLATES = [
-  "Hi {name}, this is from Avodha. We have an upcoming batch for {course} starting soon. Would you like to know more?",
-  "Hi {name}, just following up on your interest in {course}. Our counselor is available today — shall I schedule a quick call?",
-  "Hi {name}, reminder about your {course} enrollment discussion. We have only a few seats left in this batch!",
-];
-
-export const PITCH_CUES = [
+// Stored in DB so they can be edited at runtime
+export const DEFAULT_PITCH_CUES = [
   {
-    title: 'Salary & placement proof',
+    order: 1, title: 'Salary & placement proof',
     points: [
       'Avg. starting salary ₹4.2L — show live placement tracker',
       '92% placement rate in last 3 batches',
@@ -48,7 +44,7 @@ export const PITCH_CUES = [
     ],
   },
   {
-    title: 'Fee & EMI objection',
+    order: 2, title: 'Fee & EMI objection',
     points: [
       '₹0 down EMI starting ₹2,100/month (24 months)',
       'Compare: 1 month salary covers full course fee',
@@ -57,7 +53,7 @@ export const PITCH_CUES = [
     ],
   },
   {
-    title: 'Competitor comparison',
+    order: 3, title: 'Competitor comparison',
     points: [
       'We offer live projects — not recorded lectures',
       'Dedicated placement cell, not just a job portal',
@@ -66,7 +62,7 @@ export const PITCH_CUES = [
     ],
   },
   {
-    title: 'Urgency & next step',
+    order: 4, title: 'Urgency & next step',
     points: [
       'Next batch starts in 12 days — 4 seats left',
       'Free demo class this Saturday 10 AM',
@@ -76,88 +72,57 @@ export const PITCH_CUES = [
   },
 ];
 
-// ─── Seed helpers ────────────────────────────────────────────
-function rnd(a)  { return a[Math.floor(Math.random() * a.length)]; }
-function ri(a,b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
-function daysAgo(n)    { return new Date(Date.now() - n * 86400000); }
-function daysFromNow(n){ return new Date(Date.now() + n * 86400000); }
-
-const FIRST = ['Arjun','Priya','Rahul','Anjali','Mohammed','Sneha','Vishnu','Lakshmi','Rohan','Divya','Kiran','Meera','Arun','Nisha','Suresh','Asha','Deepak','Kavya','Sanjay','Pooja','Aditya','Reshma','Nikhil','Bindu','Vinod'];
-const LAST  = ['Kumar','Sharma','Nair','Menon','Das','Pillai','Varma','Iyer','Reddy','Patel','Singh','Bose','Joshi','Ghosh','Verma','Rao','Thomas','George','Jose','Mathew'];
-
-const FEEDBACKS = [
-  'Interested, needs more time','Budget concern raised','Asked to call next week',
-  'Very responsive','Needs parent approval','Ready to enroll soon',
-  'Comparing with other institutes','Will discuss with family',
-];
-const SELF_NOTES = [
-  'Explained course well','Should have asked about budget earlier',
-  'Good rapport built','Missed salary stats opportunity',
-  'Rushed the close — slow down','Need to mention demo earlier',
+export const WHATSAPP_TEMPLATES = [
+  "Hi {name}, this is from Avodha. We have an upcoming batch for {course} starting soon. Would you like to know more?",
+  "Hi {name}, just following up on your interest in {course}. Our counselor is available today — shall I schedule a quick call?",
+  "Hi {name}, reminder about your {course} enrollment. We have only a few seats left in this batch!",
 ];
 
-function generateLeads(count = 40) {
-  return Array.from({ length: count }, (_, i) => {
-    const src = i < 12 ? SOURCE.ENQUIRY : i < 35 ? SOURCE.COLD_CALL : SOURCE.REFERRAL;
-    const st  = i < 4 ? STATUS.HOT : i < 8 ? STATUS.NEW : Object.values(STATUS)[i % 5];
-    return {
-      name:              `${rnd(FIRST)} ${rnd(LAST)}`,
-      phone:             `+91 ${ri(70000,99999)} ${ri(10000,99999)}`,
-      email:             `${FIRST[i % FIRST.length].toLowerCase()}${i + 1}@gmail.com`,
-      course:            COURSES[i % COURSES.length],
-      source:            src,
-      status:            st,
-      last_called_at:    daysAgo(ri(0, 14)),
-      next_follow_up_at: daysFromNow(ri(0, 7)),
-    };
-  });
-}
-
-function generateCallLogs(leads) {
-  const logs = [];
-  leads.slice(0, 28).forEach(lead => {
-    const n = ri(1, 4);
-    for (let c = 0; c < n; c++) {
-      const conn = rnd(Object.values(CONN));
-      logs.push({
-        lead_id:             lead.id,
-        timestamp:           daysAgo(ri(0, 20)),
-        duration_seconds:    conn === CONN.CONNECTED ? ri(90, 900) : ri(0, 25),
-        connection_status:   conn,
-        rating:              conn === CONN.CONNECTED ? ri(2, 5) : null,
-        feedback_customer:   conn === CONN.CONNECTED ? rnd(FEEDBACKS) : '',
-        feedback_self:       conn === CONN.CONNECTED ? rnd(SELF_NOTES) : '',
-        completed_milestones: conn === CONN.CONNECTED
-          ? DEFAULT_MILESTONES.slice(0, ri(2, 6)).map(m => m.label)
-          : [],
-        objection_tags: conn === CONN.CONNECTED && ri(0, 1) ? [rnd(OBJ_TAGS)] : [],
-      });
-    }
-  });
-  return logs;
-}
-
-// ─── One-time seed ────────────────────────────────────────────
+// ─── Seed (no fake leads — only structure data) ───────────────
 export async function seedDatabase() {
-  const count = await db.leads.count();
-  if (count > 0) return;
+  const msCount = await db.milestones.count();
+  if (msCount === 0) await db.milestones.bulkAdd(DEFAULT_MILESTONES);
 
-  const leads = generateLeads(40);
-  const insertedIds = await db.leads.bulkAdd(leads, { allKeys: true });
-  const leadsWithIds = leads.map((l, i) => ({ ...l, id: insertedIds[i] }));
-  const logs = generateCallLogs(leadsWithIds);
-  await db.callLogs.bulkAdd(logs);
-  await db.milestones.bulkAdd(DEFAULT_MILESTONES);
-  await db.settings.add({ decay_days: 7 });
+  const stCount = await db.settings.count();
+  if (stCount === 0) await db.settings.add({ decay_days: 7 });
+
+  const pcCount = await db.pitchCues.count();
+  if (pcCount === 0) await db.pitchCues.bulkAdd(DEFAULT_PITCH_CUES);
 }
 
-// ─── CRUD helpers ────────────────────────────────────────────
-export async function getLeads()            { return db.leads.orderBy('id').toArray(); }
-export async function getCallLogs(leadId)   { return db.callLogs.where('lead_id').equals(leadId).sortBy('timestamp'); }
-export async function getAllCallLogs()       { return db.callLogs.orderBy('timestamp').toArray(); }
-export async function getMilestones()       { return db.milestones.orderBy('order').toArray(); }
-export async function getSettings()         { return db.settings.limit(1).first(); }
+// ─── CRUD helpers ─────────────────────────────────────────────
+export async function getLeads()              { return db.leads.orderBy('id').toArray(); }
+export async function getCallLogs(leadId)     { return db.callLogs.where('lead_id').equals(leadId).sortBy('timestamp'); }
+export async function getAllCallLogs()         { return db.callLogs.orderBy('timestamp').toArray(); }
+export async function getMilestones()         { return db.milestones.orderBy('order').toArray(); }
+export async function getPitchCues()          { return db.pitchCues.orderBy('order').toArray(); }
+export async function getSettings()           { return db.settings.limit(1).first(); }
 
-export async function addCallLog(log)       { return db.callLogs.add({ ...log, timestamp: new Date() }); }
-export async function updateLead(id, patch) { return db.leads.update(id, patch); }
-export async function addLead(lead)         { return db.leads.add(lead); }
+export async function addCallLog(log)         { return db.callLogs.add({ ...log, timestamp: new Date() }); }
+export async function updateLead(id, patch)   { return db.leads.update(id, patch); }
+export async function addLead(lead)           { return db.leads.add(lead); }
+export async function deleteLead(id)          { return db.transaction('rw', db.leads, db.callLogs, async () => {
+  await db.callLogs.where('lead_id').equals(id).delete();
+  await db.leads.delete(id);
+}); }
+export async function updatePitchCue(id, patch) { return db.pitchCues.update(id, patch); }
+export async function updateSettings(id, patch) { return db.settings.update(id, patch); }
+
+// ─── CSV import helper ────────────────────────────────────────
+export async function importLeadsFromCSV(rows) {
+  // rows = [{ name, phone, email?, course?, source?, status? }, ...]
+  const now = new Date();
+  const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1);
+  const clean = rows.map(r => ({
+    name:              (r.name || '').trim(),
+    phone:             (r.phone || '').trim(),
+    email:             (r.email || '').trim(),
+    course:            (r.course || '').trim(),
+    source:            ['Enquiry','Cold Call','Referral'].includes(r.source) ? r.source : 'Cold Call',
+    status:            ['New','Hot','Nurture','Enrolled','Dead'].includes(r.status) ? r.status : 'New',
+    last_called_at:    new Date(0),
+    next_follow_up_at: tomorrow,
+  })).filter(r => r.name && r.phone);
+  if (!clean.length) throw new Error('No valid rows found. Check name and phone columns.');
+  return db.leads.bulkAdd(clean, { allKeys: true });
+}
