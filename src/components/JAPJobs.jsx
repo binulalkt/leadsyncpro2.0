@@ -192,11 +192,11 @@ export default function JAPJobs() {
 
     japJobs.forEach(job => {
       // Location Opportunity Counts
-      const loc = job.location.toUpperCase();
+      const loc = (job.location || 'UNKNOWN').toUpperCase();
       locationCounts[loc] = (locationCounts[loc] || 0) + 1;
 
       // Category breakdown
-      const cat = job.category.toLowerCase();
+      const cat = (job.category || job.type || 'Job').toLowerCase();
       if (cat.includes('internship')) {
         internshipCount++;
       } else {
@@ -204,7 +204,7 @@ export default function JAPJobs() {
       }
 
       // Mode breakdown
-      const md = job.mode.toLowerCase();
+      const md = (job.mode || 'Work at Office').toLowerCase();
       if (md.includes('office') || md.includes('wfo') || md.includes('onsite') || md.includes('on-site')) {
         wfoCount++;
       } else {
@@ -233,11 +233,17 @@ export default function JAPJobs() {
     return japJobs.filter(j => {
       if (search === '') return true;
       const term = search.toLowerCase();
-      return j.title.toLowerCase().includes(term) ||
-        j.job_id.toLowerCase().includes(term) ||
-        j.location.toLowerCase().includes(term) ||
-        j.mode.toLowerCase().includes(term) ||
-        j.category.toLowerCase().includes(term);
+      const title = (j.title || '').toLowerCase();
+      const jobId = (j.job_id || '').toLowerCase();
+      const location = (j.location || '').toLowerCase();
+      const mode = (j.mode || '').toLowerCase();
+      const category = (j.category || j.type || '').toLowerCase();
+
+      return title.includes(term) ||
+        jobId.includes(term) ||
+        location.includes(term) ||
+        mode.includes(term) ||
+        category.includes(term);
     });
   }, [japJobs, search]);
 
@@ -403,8 +409,14 @@ export default function JAPJobs() {
             const hasMatch = matches.length > 0;
             const isExpanded = expandedJobId === job.id;
             const daysLeft = getDaysDiff(job.due_date);
+
+            const jobCategory = job.category || job.type || 'Job';
+            const jobMode = job.mode || 'Work at Office';
+            const jobGender = job.gender || 'Both';
+            const jobLocation = job.location || 'UNKNOWN';
+            const isInternship = jobCategory.toLowerCase().includes('internship');
             
-            let deadlineText = `Due Date: ${job.due_date}`;
+            let deadlineText = job.due_date ? `Due Date: ${job.due_date}` : 'No deadline';
             let deadlineColor = 'var(--t3)';
             if (daysLeft === 1) {
               deadlineText = `⚠ Expiring Tomorrow (${job.due_date})`;
@@ -426,11 +438,11 @@ export default function JAPJobs() {
                   <span style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--t3)' }}>Job ID: {job.job_id}</span>
                   <span style={{ 
                     fontFamily: 'var(--mono)', fontSize: 8, padding: '1px 5px', borderRadius: 3,
-                    background: job.category.toLowerCase().includes('internship') ? 'rgba(139, 92, 246, 0.15)' : 'rgba(34, 197, 94, 0.15)',
-                    border: `1px solid ${job.category.toLowerCase().includes('internship') ? '#8b5cf6' : '#22c55e'}`,
-                    color: job.category.toLowerCase().includes('internship') ? '#a78bfa' : '#22c55e'
+                    background: isInternship ? 'rgba(139, 92, 246, 0.15)' : 'rgba(34, 197, 94, 0.15)',
+                    border: `1px solid ${isInternship ? '#8b5cf6' : '#22c55e'}`,
+                    color: isInternship ? '#a78bfa' : '#22c55e'
                   }}>
-                    {job.category.toUpperCase()}
+                    {jobCategory.toUpperCase()}
                   </span>
                 </div>
 
@@ -439,9 +451,9 @@ export default function JAPJobs() {
                     {job.title}
                   </h3>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px 12px', fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--t2)', marginTop: 4 }}>
-                    <span>📍 {job.location}</span>
-                    <span>💼 {job.mode}</span>
-                    <span>👤 Target: {job.gender}</span>
+                    <span>📍 {jobLocation}</span>
+                    <span>💼 {jobMode}</span>
+                    <span>👤 Target: {jobGender}</span>
                   </div>
                 </div>
 
