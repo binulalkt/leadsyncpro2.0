@@ -21,6 +21,7 @@ export default function Topbar({ callActive, onAddLead, onImport }) {
     { key: 'leads',     label: 'Leads' },
     { key: 'today',     label: 'Today', badge: todayCount },
     { key: 'analytics', label: 'Analytics' },
+    { key: 'jobs',      label: 'JAP Careers' },
   ];
 
   return (

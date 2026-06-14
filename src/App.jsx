@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './index.css';
-import { seedDatabase, getLeads, getMilestones, getSettings, getAllCallLogs, getCallLogs, addLead, getPitchCues } from './db';
+import { seedDatabase, getLeads, getMilestones, getSettings, getAllCallLogs, getCallLogs, addLead, getPitchCues, getJapJobs } from './db';
 import { useAppStore } from './store';
 import Topbar from './components/Topbar';
 import LeadList from './components/LeadList';
@@ -11,12 +11,14 @@ import Analytics from './components/Analytics';
 import AddLeadDrawer from './components/AddLeadDrawer';
 import TodayView from './components/TodayView';
 import CSVImport from './components/CSVImport';
+import JAPJobs from './components/JAPJobs';
 
 export default function App() {
   const {
     page, setPage, setLeads, setMilestones, setSettings, setAllLogs,
     setPitchCues, callActive, startCall, openModal, modalOpen,
     callLogsCache, setLeadLogs, addLeadToStore, selectedLead,
+    setJapJobs, setLastJobsSync
   } = useAppStore();
 
   const [loading,     setLoading]     = useState(true);
@@ -38,14 +40,16 @@ export default function App() {
     (async () => {
       try {
         await seedDatabase();
-        const [leads, milestones, settings, allLogs, pitchCues] = await Promise.all([
-          getLeads(), getMilestones(), getSettings(), getAllCallLogs(), getPitchCues(),
+        const [leads, milestones, settings, allLogs, pitchCues, jobs] = await Promise.all([
+          getLeads(), getMilestones(), getSettings(), getAllCallLogs(), getPitchCues(), getJapJobs(),
         ]);
         setLeads(leads);
         setMilestones(milestones);
         setPitchCues(pitchCues);
         if (settings) setSettings(settings);
         setAllLogs(allLogs);
+        setJapJobs(jobs);
+        setLastJobsSync(new Date(Date.now() - 30 * 60 * 1000)); // Simulate synced 30 mins ago initially
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -185,6 +189,7 @@ service cloud.firestore {
               {page === 'leads' && (selectedLead ? <LeadDetail onDial={handleDial} /> : <LeadList onDial={handleDial} />)}
               {page === 'today' && (selectedLead ? <LeadDetail onDial={handleDial} /> : <TodayView onDial={handleDial} onSelect={() => setPage('leads')} />)}
               {page === 'analytics' && <Analytics />}
+              {page === 'jobs' && <JAPJobs />}
             </>
           )
         ) : (
@@ -204,6 +209,7 @@ service cloud.firestore {
               </>
             )}
             {page === 'analytics' && <Analytics />}
+            {page === 'jobs' && <JAPJobs />}
           </>
         )}
       </div>

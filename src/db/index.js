@@ -112,6 +112,273 @@ export const WHATSAPP_TEMPLATES = [
   "Hi {name}, reminder about your {course} enrollment. We have only a few seats left in this batch!",
 ];
 
+export const DEFAULT_JAP_JOBS = [
+  {
+    job_id: "JAP-201",
+    title: "React & Node Developer",
+    company: "Avodha Tech Labs",
+    course: "IT 2",
+    type: "Job",
+    openings: 3,
+    location: "Kochi, Kerala (On-site)",
+    salary: "₹25,000 - ₹35,000 / month",
+    description: "Full stack developer proficient in React, Node.js, and MongoDB. Will work on CRM and e-learning platforms.",
+    postedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-202",
+    title: "Frontend Intern",
+    company: "DigiTech Solutions",
+    course: "IT 2",
+    type: "Internship",
+    openings: 5,
+    location: "Remote",
+    salary: "₹8,000 / month",
+    description: "Learn and build interactive user interfaces using React, HTML, and vanilla CSS.",
+    postedDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-203",
+    title: "UI/UX Designer",
+    company: "Creative Minds Studio",
+    course: "Designer 2",
+    type: "Job",
+    openings: 2,
+    location: "Bangalore (Hybrid)",
+    salary: "₹30,000 - ₹40,000 / month",
+    description: "Design user flows, wireframes, and high-fidelity screens for mobile and web apps using Figma.",
+    postedDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-204",
+    title: "Graphic Designer Intern",
+    company: "SocialPulse Marketing",
+    course: "Designer 2",
+    type: "Internship",
+    openings: 4,
+    location: "Kochi, Kerala",
+    salary: "₹7,000 / month",
+    description: "Design social media banners, advertisements, and promotional templates under the marketing lead's guidance.",
+    postedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-205",
+    title: "Junior Accountant",
+    company: "KPMG Associates",
+    course: "Commerce",
+    type: "Job",
+    openings: 6,
+    location: "Ernakulam, Kerala",
+    salary: "₹20,000 - ₹25,000 / month",
+    description: "Manage accounts payable/receivable, prepare bank reconciliations, and compile financial reports using Tally Prime.",
+    postedDate: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-206",
+    title: "Audit Assistant Intern",
+    company: "Nambiar & Co. CAs",
+    course: "Commerce",
+    type: "Internship",
+    openings: 3,
+    location: "Calicut, Kerala",
+    salary: "₹10,000 / month",
+    description: "Assist in statutory audit files preparation, physical stock checks, and basic taxation computations.",
+    postedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-207",
+    title: "Business Development Executive",
+    company: "Avodha Careers",
+    course: "Management 2",
+    type: "Job",
+    openings: 10,
+    location: "Kochi, Kerala",
+    salary: "₹22,000 - ₹30,000 / month",
+    description: "Drive sales campaigns, follow up with student enquiries, and achieve monthly enrollment targets.",
+    postedDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-208",
+    title: "HR Recruiter Intern",
+    company: "PeopleFirst HR Solutions",
+    course: "Management 2",
+    type: "Internship",
+    openings: 2,
+    location: "Remote",
+    salary: "₹9,000 / month",
+    description: "Source profiles from job boards, conduct initial telephonic screening, and schedule interviews.",
+    postedDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-209",
+    title: "Medical Coding Associate",
+    company: "CareHealth Systems",
+    course: "Medicaal 2",
+    type: "Job",
+    openings: 8,
+    location: "Coimbatore, Tamil Nadu",
+    salary: "₹24,000 - ₹28,000 / month",
+    description: "Review patient records and translate medical diagnoses/procedures into ICD-10 and CPT codes.",
+    postedDate: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-210",
+    title: "Hospital Admin Intern",
+    company: "Sunrise Specialty Clinic",
+    course: "Medicaal 2",
+    type: "Internship",
+    openings: 2,
+    location: "Trivandrum, Kerala",
+    salary: "₹6,000 / month",
+    description: "Handle front office reception desk, schedule doctor appointments, and manage patient entry records.",
+    postedDate: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-211",
+    title: "Corporate Tax Specialist",
+    company: "EY Global Services",
+    course: "ACCA",
+    type: "Job",
+    openings: 3,
+    location: "Bangalore",
+    salary: "₹45,000 - ₹55,000 / month",
+    description: "Perform international tax assessments and prepare client filings. ACCA certification (part or fully qualified) is required.",
+    postedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-212",
+    title: "ACCA Trainee Intern",
+    company: "BDO India",
+    course: "ACCA",
+    type: "Internship",
+    openings: 4,
+    location: "Kochi, Kerala",
+    salary: "₹12,000 / month",
+    description: "Gain training in internal audit procedures, risk advisory, and corporate governance compliance.",
+    postedDate: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-213",
+    title: "Cost Accountant Associate",
+    company: "Aditya Birla Group",
+    course: "CMA",
+    type: "Job",
+    openings: 2,
+    location: "Chennai",
+    salary: "₹35,000 - ₹45,000 / month",
+    description: "Analyze manufacturing overhead costs, material variances, and compile product pricing recommendations.",
+    postedDate: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-214",
+    title: "Executive Counselor",
+    company: "Avodha Placement Team",
+    course: "Professional 6",
+    type: "Job",
+    openings: 5,
+    location: "Kochi, Kerala",
+    salary: "₹28,000 - ₹38,000 / month",
+    description: "Manage the counseling department operations and oversee career counseling metrics.",
+    postedDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-215",
+    title: "Career Counselor Intern",
+    company: "Edustart Advisory",
+    course: "Professional 6",
+    type: "Internship",
+    openings: 3,
+    location: "Remote",
+    salary: "₹10,000 / month",
+    description: "Interact with students to guide them through career choices and program curriculum overview.",
+    postedDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-216",
+    title: "Sales Team Lead",
+    company: "SkillUp Academy",
+    course: "Professional 5",
+    type: "Job",
+    openings: 2,
+    location: "Kochi, Kerala",
+    salary: "₹30,000 - ₹42,000 / month",
+    description: "Train and lead a team of junior telesales counselors to hit monthly sales targets.",
+    postedDate: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-217",
+    title: "Content Developer (TET/PSC)",
+    company: "Target Coaching Academy",
+    course: "Examcoach 2",
+    type: "Job",
+    openings: 4,
+    location: "Trivandrum, Kerala",
+    salary: "₹18,000 - ₹24,000 / month",
+    description: "Prepare mock test papers, study notes, and syllabus analysis for Kerala PSC/TET exams.",
+    postedDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-218",
+    title: "Tutor Intern (Math & Science)",
+    company: "ExamPrep Online",
+    course: "Examcoach 2",
+    type: "Internship",
+    openings: 6,
+    location: "Remote",
+    salary: "₹7,500 / month",
+    description: "Explain problem-solving steps and deliver doubt-clearing sessions via Zoom for school students.",
+    postedDate: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-219",
+    title: "CAD Design Engineer",
+    company: "Automech Industries",
+    course: "Engg 2",
+    type: "Job",
+    openings: 3,
+    location: "Kochi, Kerala",
+    salary: "₹22,000 - ₹28,000 / month",
+    description: "Produce 3D models and assembly draft drawings for mechanical components using AutoCAD/Solidworks.",
+    postedDate: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-220",
+    title: "Embedded Systems Intern",
+    company: "ElectroLabs India",
+    course: "Engg 2",
+    type: "Internship",
+    openings: 2,
+    location: "Coimbatore, Tamil Nadu",
+    salary: "₹8,000 / month",
+    description: "Work on microcontroller programming, circuit prototyping, and sensor integration testing.",
+    postedDate: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-221",
+    title: "Financial Analyst",
+    company: "Cargill Corporate Finance",
+    course: "CMA USA",
+    type: "Job",
+    openings: 2,
+    location: "Bangalore (Hybrid)",
+    salary: "₹40,000 - ₹50,000 / month",
+    description: "Develop budget forecasting models and conduct profitability analysis. Requires knowledge of CMA USA concepts.",
+    postedDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000)
+  },
+  {
+    job_id: "JAP-222",
+    title: "Management Accountant Intern",
+    company: "Apex Global Finance",
+    course: "CMA USA",
+    type: "Internship",
+    openings: 3,
+    location: "Remote",
+    salary: "₹12,000 / month",
+    description: "Prepare variance reports, spreadsheet logs, and coordinate cost-center reports collation.",
+    postedDate: new Date(Date.now() - 22 * 24 * 60 * 60 * 1000)
+  }
+];
+
 // ─── Seed (no fake leads — only structure data) ───────────────
 export async function seedDatabase() {
   // Seed Milestones
@@ -142,6 +409,88 @@ export async function seedDatabase() {
     });
     await batch.commit();
   }
+
+  // Seed JAP Jobs
+  const jobsSnap = await getDocs(collection(db, 'japJobs'));
+  if (jobsSnap.empty) {
+    const batch = writeBatch(db);
+    DEFAULT_JAP_JOBS.forEach(job => {
+      const docRef = doc(collection(db, 'japJobs'));
+      batch.set(docRef, job);
+    });
+    await batch.commit();
+  }
+}
+
+// ─── Jobs CRUD & Simulation ───────────────────────────────────
+export async function getJapJobs() {
+  const snap = await getDocs(collection(db, 'japJobs'));
+  const jobs = snap.docs.map(doc => ({ id: doc.id, ...convertTimestamps(doc.data()) }));
+  // Sort by job_id ascending
+  jobs.sort((a, b) => a.job_id.localeCompare(b.job_id));
+  return jobs;
+}
+
+export async function syncJapJobs() {
+  // Simulate fetching new jobs from jap.avodha.org.
+  // Add some new jobs to the database if they are not already there.
+  const snap = await getDocs(collection(db, 'japJobs'));
+  const existingJobIds = new Set(snap.docs.map(doc => doc.data().job_id));
+  
+  const EXTRA_JOBS = [
+    {
+      job_id: "JAP-223",
+      title: "Tax Specialist (EA)",
+      company: "H&R Block India",
+      course: "EA",
+      type: "Job",
+      openings: 3,
+      location: "Kochi, Kerala (Hybrid)",
+      salary: "₹32,000 - ₹38,000 / month",
+      description: "Prepare US individual tax returns, audit representation logs, and research tax regulations. EA certification is highly preferred.",
+      postedDate: new Date()
+    },
+    {
+      job_id: "JAP-224",
+      title: "Product Designer (UI/UX)",
+      company: "Innovate Fintech",
+      course: "Designer 2",
+      type: "Job",
+      openings: 2,
+      location: "Remote",
+      salary: "₹45,000 - ₹55,000 / month",
+      description: "Lead user research, prototyping, and collaborate with engineering to ship visual features for our payment app.",
+      postedDate: new Date()
+    },
+    {
+      job_id: "JAP-225",
+      title: "Content Marketing Intern",
+      company: "Avodha Marketing Group",
+      course: "Others 2",
+      type: "Internship",
+      openings: 5,
+      location: "Kochi, Kerala (On-site)",
+      salary: "₹8,500 / month",
+      description: "Write SEO blog posts, assist in scripting marketing campaigns, and manage social media handles.",
+      postedDate: new Date()
+    }
+  ];
+
+  const batch = writeBatch(db);
+  let newlyAdded = 0;
+  EXTRA_JOBS.forEach(job => {
+    if (!existingJobIds.has(job.job_id)) {
+      const docRef = doc(collection(db, 'japJobs'));
+      batch.set(docRef, job);
+      newlyAdded++;
+    }
+  });
+
+  if (newlyAdded > 0) {
+    await batch.commit();
+  }
+  
+  return getJapJobs();
 }
 
 // ─── CRUD helpers ─────────────────────────────────────────────

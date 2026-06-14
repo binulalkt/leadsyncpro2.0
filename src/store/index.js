@@ -94,6 +94,11 @@ export const useAppStore = create((set, get) => ({
   allLogs: [],
   setAllLogs: logs => set({ allLogs: logs }),
 
+  japJobs: [],
+  setJapJobs: jobs => set({ japJobs: jobs }),
+  lastJobsSync: null,
+  setLastJobsSync: t => set({ lastJobsSync: t }),
+
   search: '',
   statusFilter: null,
   sourceFilter: null,
