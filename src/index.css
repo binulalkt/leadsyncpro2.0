@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg0:#0f1014;--bg1:#16181e;--bg2:#1e2128;--bg3:#252830;
+  --bd:#2e3140;--bd2:#3d4155;
+  --t0:#e8eaf2;--t1:#9da3b8;--t2:#5c6278;--t3:#3a3e52;
+  --amber:#f0930a;--adim:#7a4b05;--abg:#1e1508;
+  --green:#22c55e;--gdim:#14532d;--gbg:#0b1f0f;
+  --red:#ef4444;--rdim:#7f1d1d;--rbg:#1a0808;
+  --blue:#60a5fa;--bdim:#1e3a5f;--bbg:#0c1829;
+  --purple:#a78bfa;--pdim:#3b2f6e;--pbg:#120f2a;
+  --teal:#2dd4bf;--tdim:#0d4f49;--tbg:#071e1c;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+  --radius:5px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{height:100%;background:var(--bg0);color:var(--t0);font-family:var(--sans);font-size:13px;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg0)}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+button{font-family:var(--sans);cursor:pointer}
+input,textarea,select{font-family:var(--sans)}
+.mono{font-family:var(--mono)}
+.pill{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;border:1px solid;white-space:nowrap}
+.pill-enquiry{background:var(--bbg);color:var(--blue);border-color:var(--bdim)}
+.pill-coldcall{background:var(--abg);color:var(--amber);border-color:var(--adim)}
+.pill-referral{background:var(--gbg);color:var(--green);border-color:var(--gdim)}
+.pill-hot{background:var(--abg);color:var(--amber);border-color:var(--adim)}
+.pill-new{background:var(--bbg);color:var(--blue);border-color:var(--bdim)}
+.pill-nurture{background:var(--pbg);color:var(--purple);border-color:var(--pdim)}
+.pill-enrolled{background:var(--gbg);color:var(--green);border-color:var(--gdim)}
+.pill-dead{background:var(--bg3);color:var(--t2);border-color:var(--bd)}
+.section-title{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--bd)}
+.btn{height:34px;padding:0 14px;border-radius:var(--radius);font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.04em;border:1px solid;transition:all .12s;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.btn-green{background:var(--gbg);border-color:var(--gdim);color:var(--green)}
+.btn-green:hover{background:var(--gdim)}
+.btn-amber{background:var(--abg);border-color:var(--adim);color:var(--amber)}
+.btn-amber:hover{background:var(--adim)}
+.btn-red{background:var(--rbg);border-color:var(--rdim);color:var(--red)}
+.btn-red:hover{background:var(--rdim);color:#fff}
+.btn-ghost{background:none;border-color:var(--bd);color:var(--t2)}
+.btn-ghost:hover{border-color:var(--bd2);color:var(--t1)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.field-input{width:100%;height:34px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--radius);padding:0 10px;font-family:var(--mono);font-size:11px;color:var(--t0);outline:none;transition:border-color .12s}
+.field-input:focus{border-color:var(--bd2)}
+.field-input::placeholder{color:var(--t3)}
+.field-input[type="date"]::-webkit-calendar-picker-indicator,.field-input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(.4)}
+.field-textarea{width:100%;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--radius);padding:8px 10px;font-family:var(--sans);font-size:11px;color:var(--t0);resize:vertical;outline:none;line-height:1.5;transition:border-color .12s}
+.field-textarea:focus{border-color:var(--bd2)}
+.field-textarea::placeholder{color:var(--t3)}
+.field-label{font-family:var(--mono);font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.req{color:var(--red)}
+.card{background:var(--bg1);border:1px solid var(--bd);border-radius:var(--radius)}
