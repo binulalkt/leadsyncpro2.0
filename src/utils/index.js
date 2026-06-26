@@ -33,7 +33,13 @@ export function initials(name) {
 }
 
 export function avatarPalette(id) {
-  return AVATAR_PALETTES[id % AVATAR_PALETTES.length];
+  let hash = 0;
+  const str = String(id ?? '');
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 31 + str.charCodeAt(i)) | 0;
+  }
+  const idx = Math.abs(hash) % AVATAR_PALETTES.length;
+  return AVATAR_PALETTES[idx];
 }
 
 export function fmtSecs(s) {
